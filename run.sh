@@ -1,3 +1,3 @@
-java -jar jflex-full-1.9.1.jar ExercicioC.flex
+java -jar jflex-full-1.9.1.jar Rascunho.flex
 javac Yylex.java
-java Yylex input2.txt
+java Yylex inputT.txt
