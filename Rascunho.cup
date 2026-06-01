@@ -1,0 +1,82 @@
+import java_cup.runtime.*;
+import java.io.*;
+
+parser code {:
+    scanner s;
+    parser(scanner s){ this.s=s; }
+:};
+
+scan with {: return s.next_token(); :};
+
+
+terminal IF, ELSE, WHILE;
+terminal RETURN, CONST, VAR;
+
+terminal ADD, SUB, MULT, DIV;
+terminal IGUAL, DIFERENTE;
+
+terminal LPAREN, RPAREN;
+terminal ASPA;
+terminal COMENT;
+
+terminal String IDENT;
+terminal Integer NUMERO;
+
+terminal String ESPECIAL;
+
+precedence left ADD, SUB;
+precedence left MULT, DIV;
+
+non terminal programa;
+non terminal lista_comandos;
+non terminal comando;
+
+non terminal declaracao;
+non terminal atribuicao;
+
+non terminal estrutura_if;
+non terminal estrutura_while;
+
+non terminal expressao;
+
+start with programa;
+
+programa ::= lista_comandos ;
+
+lista_comandos ::=
+        lista_comandos comando
+      | comando
+      ;
+
+comando ::=
+        declaracao
+      | atribuicao
+      | estrutura_if
+      | estrutura_while
+      ;
+
+declaracao ::=
+        VAR IDENT
+      | CONST IDENT
+      ;
+
+atribuicao ::=
+        IDENT IGUAL expressao
+      ;
+
+estrutura_if ::=
+        IF LPAREN expressao RPAREN
+      ;
+
+estrutura_while ::=
+        WHILE LPAREN expressao RPAREN
+      ;
+
+expressao ::=
+      NUMERO
+    | IDENT
+    | expressao ADD expressao
+    | expressao SUB expressao
+    | expressao MULT expressao
+    | expressao DIV expressao
+    ;

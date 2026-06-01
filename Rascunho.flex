@@ -1,9 +1,14 @@
+import java_cup.runtime.*;
+
 %%
-%standalone
+
+%class scanner
+%unicode
+%cup
+
 
 Letra = [a-zA-Z]
 Digito = [0-9]
-Especial = [ç#]
 Numero = {Digito}{Digito}*
 Ident = {Letra}({Letra}|{Digito})*
 
@@ -28,27 +33,37 @@ Lim_coment = "<c>"
 
 
 %%
-{Kw_If}     { System.out.println("<if>"); }
-{Kw_Else}   { System.out.println("<else>"); }
-{Kw_While}  { System.out.println("<while>"); }
-{Kw_Return} { System.out.println("<return>"); }
-{Kw_Const}  { System.out.println("<const>"); }
-{Kw_Var}    { System.out.println("<var>"); }
+{Kw_If}     {return new Symbol(sym.IF);}
+{Kw_Else}   {return new Symbol(sym.ELSE);}
+{Kw_While}  {return new Symbol(sym.WHILE);}
+{Kw_Return} {return new Symbol(sym.RETURN);}
+{Kw_Const}  {return new Symbol(sym.CONST);}
+{Kw_Var}    {return new Symbol(sym.VAR);}
 
-{Ident} {System.out.print("<identificador>");}
-{Numero} {System.out.print("<numero>");}
-{Especial} {System.out.print("<especial>");}
-[ \t\r\n]+ {/* ignora espaços */}
+{Ident} {return new Symbol(sym.IDENT, yytext());}
 
-{Op_add} {System.out.println("<op_add>");}
-{Op_sub} {System.out.println("<op_sub>");}
-{Op_mult} {System.out.println("<op_mult>");}
-{Op_div} {System.out.println("<op_div>");}
-{Op_igual} {System.out.println("<op_igual>");}
-{Op_diferente} {System.out.println("<op_diferente>");}
-{Lim_Pe} {System.out.println("<paren_esq>");}
-{Lim_Pd} {System.out.println("<paren_dir>");}
-{Lim_aspa} {System.out.println("<aspa>");}
-{Lim_coment} {System.out.println("<lim_coment>");}
+{Numero} {return new Symbol(sym.NUMERO, Integer.parseInt(yytext()));}
 
-. {System.out.println("<erro> " + yytext());}
+[ \t\r\n]+ {}
+
+{Op_add} {return new Symbol(sym.ADD);}
+
+{Op_sub} {return new Symbol(sym.SUB);}
+
+{Op_mult} {return new Symbol(sym.MULT);}
+
+{Op_div} {return new Symbol(sym.DIV);}
+
+{Op_igual} {return new Symbol(sym.IGUAL);}
+
+{Op_diferente} {return new Symbol(sym.DIFERENTE);}
+
+{Lim_Pe} {return new Symbol(sym.LPAREN);}
+
+{Lim_Pd} {return new Symbol(sym.RPAREN);}
+
+{Lim_aspa} {return new Symbol(sym.ASPA);}
+
+{Lim_coment} {return new Symbol(sym.COMENT);}
+
+. {System.err.println("Erro léxico: " + yytext());}
