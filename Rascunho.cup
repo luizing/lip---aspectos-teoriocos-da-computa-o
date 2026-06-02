@@ -135,12 +135,20 @@ atribuicao ::=
 ;
 
 estrutura_if ::=
-        IF LPAREN condicao:c RPAREN{:
+    IF LPAREN condicao:c RPAREN
+    {:
         executar = c;
     :}
     bloco
-    {: executar = true; :}
-      ;
+    ELSE
+    {:
+        executar = !c;
+    :}
+    bloco
+    {:
+        executar = true;
+    :}
+;
 
 estrutura_while ::=
         WHILE LPAREN condicao:c RPAREN bloco {:
