@@ -200,6 +200,9 @@ public class parser extends java_cup.runtime.lr_parser {
     java.util.HashMap<String,Integer> tabela =
         new java.util.HashMap<>();
 
+    java.util.HashSet<String> constantes =
+        new java.util.HashSet<>();
+
     boolean executar = true;
 
     parser(scanner s){
@@ -360,19 +363,20 @@ class CUP$parser$actions {
 		int nright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		String n = (String)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-      if (executar){
         if(tabela.containsKey(n)){
             System.out.println(
-                "Erro: constante já declarada: " + n
+                "Erro: identificador já declarado: " + n
             );
-        } else {
+        }
+        else{
             tabela.put(n, null);
+            constantes.add(n);
+
             System.out.println(
                 "Constante declarada: " + n
             );
         }
-      }
-    
+
               CUP$parser$result = parser.getSymbolFactory().newSymbol("declaracao",4, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-1)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }
           return CUP$parser$result;
@@ -388,24 +392,26 @@ class CUP$parser$actions {
 		int vright = ((java_cup.runtime.Symbol)CUP$parser$stack.peek()).right;
 		Integer v = (Integer)((java_cup.runtime.Symbol) CUP$parser$stack.peek()).value;
 		
-      if (executar){
+        if(executar){
         if(!tabela.containsKey(n)){
-
             System.out.println(
-                "Erro: variável não declarada: " + n
-            );
-
-        } else {
-
-            tabela.put(n, v);
-
-            System.out.println(
-                "Atribuição feita: "
-                + n + " = "
-                + v
+                "Erro: identificador não declarado: " + n
             );
         }
-      }
+        else if(constantes.contains(n) && tabela.get(n) != null){
+            System.out.println(
+                "Erro: constante não pode ser alterada: "
+                + n
+            );
+        }
+        else{
+            tabela.put(n, v);
+            System.out.println(
+                "Atribuição feita: "
+                + n + " = " + v
+            );
+        }
+    }
     
               CUP$parser$result = parser.getSymbolFactory().newSymbol("atribuicao",5, ((java_cup.runtime.Symbol)CUP$parser$stack.elementAt(CUP$parser$top-2)), ((java_cup.runtime.Symbol)CUP$parser$stack.peek()), RESULT);
             }

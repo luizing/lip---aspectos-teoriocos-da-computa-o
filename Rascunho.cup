@@ -8,6 +8,9 @@ parser code {:
     java.util.HashMap<String,Integer> tabela =
         new java.util.HashMap<>();
 
+    java.util.HashSet<String> constantes =
+        new java.util.HashSet<>();
+
     boolean executar = true;
 
     parser(scanner s){
@@ -89,42 +92,45 @@ declaracao ::=
         }
     :}
       | CONST IDENT:n {:
-      if (executar){
         if(tabela.containsKey(n)){
             System.out.println(
-                "Erro: constante já declarada: " + n
+                "Erro: identificador já declarado: " + n
             );
-        } else {
+        }
+        else{
             tabela.put(n, null);
+            constantes.add(n);
+
             System.out.println(
                 "Constante declarada: " + n
             );
         }
-      }
-    :}
-      ;
+:}
+;
 
 atribuicao ::=
     IDENT:n IGUAL expressao:v
     {:
-      if (executar){
+        if(executar){
         if(!tabela.containsKey(n)){
-
             System.out.println(
-                "Erro: variável não declarada: " + n
-            );
-
-        } else {
-
-            tabela.put(n, v);
-
-            System.out.println(
-                "Atribuição feita: "
-                + n + " = "
-                + v
+                "Erro: identificador não declarado: " + n
             );
         }
-      }
+        else if(constantes.contains(n) && tabela.get(n) != null){
+            System.out.println(
+                "Erro: constante não pode ser alterada: "
+                + n
+            );
+        }
+        else{
+            tabela.put(n, v);
+            System.out.println(
+                "Atribuição feita: "
+                + n + " = " + v
+            );
+        }
+    }
     :}
 ;
 
