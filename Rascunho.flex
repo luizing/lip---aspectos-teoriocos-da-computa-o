@@ -6,7 +6,7 @@ import java_cup.runtime.*;
 %unicode
 %cup
 
-
+Especial = [$]
 Letra = [a-zA-Z]
 Digito = [0-9]
 Numero = {Digito}{Digito}*
@@ -30,6 +30,8 @@ Lim_Pe = \(
 Lim_Pd = \)
 Lim_aspa = "'"
 Lim_coment = "<c>"
+
+StringLiteral = \'[^\']*\'
 
 
 %%
@@ -65,5 +67,17 @@ Lim_coment = "<c>"
 {Lim_aspa} {return new Symbol(sym.ASPA);}
 
 {Lim_coment} {return new Symbol(sym.COMENT);}
+
+{Especial} {return new Symbol(sym.ESPECIAL);}
+
+{StringLiteral} {
+    return new Symbol(
+        sym.STRING,
+        yytext().substring(
+            1,
+            yytext().length()-1
+        )
+    );
+}
 
 . {System.err.println("Erro léxico: " + yytext());}

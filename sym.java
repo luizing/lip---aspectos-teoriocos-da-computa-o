@@ -16,6 +16,7 @@ public class sym {
   public static final int LPAREN = 14;
   public static final int SUB = 9;
   public static final int ASPA = 16;
+  public static final int STRING = 21;
   public static final int EOF = 0;
   public static final int MULT = 10;
   public static final int DIFERENTE = 13;
@@ -48,7 +49,8 @@ public class sym {
   "COMENT",
   "IDENT",
   "NUMERO",
-  "ESPECIAL"
+  "ESPECIAL",
+  "STRING"
   };
 }
 
