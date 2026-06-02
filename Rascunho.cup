@@ -74,6 +74,12 @@ comando ::=
       | estrutura_if
       | estrutura_while
       | consulta
+      | error
+      {:
+          System.out.println(
+              "Comando inválido."
+          );
+      :}
       ;
 
 declaracao ::=
