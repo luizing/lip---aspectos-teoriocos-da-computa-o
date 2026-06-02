@@ -1,3 +1,0 @@
-if (luiz '= luiz) (
-    oi 'ola'
-) <c>aaa<c>

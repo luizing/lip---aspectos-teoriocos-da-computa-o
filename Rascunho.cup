@@ -2,9 +2,19 @@ import java_cup.runtime.*;
 import java.io.*;
 
 parser code {:
+
     scanner s;
-    parser(scanner s){ this.s=s; }
-:};
+
+    java.util.HashMap<String,Integer> tabela =
+        new java.util.HashMap<>();
+
+    boolean executar = true;
+
+    parser(scanner s){
+        this.s=s;
+    }
+
+:}
 
 scan with {: return s.next_token(); :};
 
@@ -24,24 +34,31 @@ terminal Integer NUMERO;
 
 terminal String ESPECIAL;
 
-precedence left ADD, SUB;
-precedence left MULT, DIV;
-
 non terminal programa;
+non terminal bloco;
 non terminal lista_comandos;
 non terminal comando;
 
 non terminal declaracao;
 non terminal atribuicao;
+non terminal consulta;
 
 non terminal estrutura_if;
 non terminal estrutura_while;
+non terminal Boolean condicao;
 
-non terminal expressao;
+non terminal Integer expressao;
+
+precedence left ADD, SUB;
+precedence left MULT, DIV;
 
 start with programa;
 
-programa ::= lista_comandos ;
+programa ::= lista_comandos
+;
+
+bloco ::= LPAREN lista_comandos RPAREN
+;
 
 lista_comandos ::=
         lista_comandos comando
@@ -53,30 +70,136 @@ comando ::=
       | atribuicao
       | estrutura_if
       | estrutura_while
+      | consulta
       ;
 
 declaracao ::=
-        VAR IDENT
-      | CONST IDENT
+        VAR IDENT:n {:
+        if (executar){
+        if(tabela.containsKey(n)){
+            System.out.println(
+                "Erro: variável já declarada: " + n
+            );
+        } else {
+            tabela.put(n, null);
+            System.out.println(
+                "Variável declarada: " + n
+            );
+        }
+        }
+    :}
+      | CONST IDENT:n {:
+      if (executar){
+        if(tabela.containsKey(n)){
+            System.out.println(
+                "Erro: constante já declarada: " + n
+            );
+        } else {
+            tabela.put(n, null);
+            System.out.println(
+                "Constante declarada: " + n
+            );
+        }
+      }
+    :}
       ;
 
 atribuicao ::=
-        IDENT IGUAL expressao
-      ;
+    IDENT:n IGUAL expressao:v
+    {:
+      if (executar){
+        if(!tabela.containsKey(n)){
+
+            System.out.println(
+                "Erro: variável não declarada: " + n
+            );
+
+        } else {
+
+            tabela.put(n, v);
+
+            System.out.println(
+                "Atribuição feita: "
+                + n + " = "
+                + v
+            );
+        }
+      }
+    :}
+;
 
 estrutura_if ::=
-        IF LPAREN expressao RPAREN
+        IF LPAREN condicao:c RPAREN{:
+        executar = c;
+    :}
+    bloco
+    {: executar = true; :}
       ;
 
 estrutura_while ::=
-        WHILE LPAREN expressao RPAREN
-      ;
+        WHILE LPAREN condicao:c RPAREN bloco {:
+        while(c){
+            System.out.println(
+                "Loop enquanto a condição for verdadeira"
+            );
+        }
+    :}
+;
 
 expressao ::=
-      NUMERO
-    | IDENT
-    | expressao ADD expressao
-    | expressao SUB expressao
-    | expressao MULT expressao
-    | expressao DIV expressao
-    ;
+      NUMERO:n
+      {: RESULT = n; :}
+
+    | IDENT:n
+      {:
+          Integer valor = tabela.get(n);
+          RESULT = valor;
+      :}
+
+     | LPAREN expressao:e RPAREN
+      {: RESULT = e; :}
+
+    | expressao:e1 ADD expressao:e2
+      {: RESULT = e1 + e2; :}
+
+    | expressao:e1 SUB expressao:e2
+      {: RESULT = e1 - e2; :}
+
+    | expressao:e1 MULT expressao:e2
+      {: RESULT = e1 * e2; :}
+
+    | expressao:e1 DIV expressao:e2
+      {: RESULT = e1 / e2; :}   
+;
+
+consulta ::=
+    expressao:e
+          {:
+          if (executar){
+            if (e == null) {
+                System.out.println("Variável não inicializada ou expressão inválida.");
+            } else {
+                System.out.println("Resultado da consulta: " + e);
+            }
+          }
+      :}
+;
+
+condicao ::=
+    IDENT:n
+    {:
+        RESULT = tabela.containsKey(n);
+    :}
+    | NUMERO:n
+    {:
+        RESULT = true;
+    :}
+    | expressao:e1 IGUAL expressao:e2
+    {:
+        RESULT = e1.equals(e2);
+    :}
+    | expressao:e1 DIFERENTE expressao:e2
+      {:
+          RESULT = !e1.equals(e2);
+      :}
+;
