@@ -8,4 +8,4 @@ set "libs=.;lib\java-cup-11b.jar;lib\java-cup-11b-runtime.jar;lib\jflex-1.8.2.ja
 java -jar %flex% LIP.flex
 java -jar %cup% -parser parser -symbols sym LIP.cup
 javac -cp "%libs%" *.java
-java -cp "%libs%" Main
+java -cp "%libs%" Main input.txt

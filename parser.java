@@ -240,13 +240,13 @@ public class parser extends java_cup.runtime.lr_parser {
 
     scanner s;
 
-    java.util.HashMap<String,Integer> tabela =
+    static java.util.HashMap<String,Integer> tabela =
         new java.util.HashMap<>();
 
-    java.util.HashSet<String> constantes =
+    static java.util.HashSet<String> constantes =
         new java.util.HashSet<>();
 
-    java.util.HashMap<String,Funcao> funcoes =
+    static java.util.HashMap<String,Funcao> funcoes =
         new java.util.HashMap<>();
 
     boolean executar = true;
@@ -306,6 +306,9 @@ try{
             novoScanner
         );
 
+    novoParser.tabela = this.tabela;
+    novoParser.constantes = this.constantes;
+    novoParser.funcoes = this.funcoes;
     novoParser.parse();
 
 }
