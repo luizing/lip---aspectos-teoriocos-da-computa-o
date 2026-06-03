@@ -6,7 +6,7 @@
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int IDENT = 18;
+  public static final int IDENT = 17;
   public static final int ELSE = 3;
   public static final int RPAREN = 15;
   public static final int IGUAL = 12;
@@ -16,15 +16,14 @@ public class sym {
   public static final int LPAREN = 14;
   public static final int SUB = 9;
   public static final int ASPA = 16;
-  public static final int STRING = 21;
+  public static final int STRING = 20;
   public static final int EOF = 0;
   public static final int MULT = 10;
   public static final int DIFERENTE = 13;
   public static final int DIV = 11;
   public static final int ADD = 8;
-  public static final int COMENT = 17;
-  public static final int ESPECIAL = 20;
-  public static final int NUMERO = 19;
+  public static final int ESPECIAL = 19;
+  public static final int NUMERO = 18;
   public static final int CONST = 6;
   public static final int error = 1;
   public static final int VAR = 7;
@@ -46,7 +45,6 @@ public class sym {
   "LPAREN",
   "RPAREN",
   "ASPA",
-  "COMENT",
   "IDENT",
   "NUMERO",
   "ESPECIAL",
