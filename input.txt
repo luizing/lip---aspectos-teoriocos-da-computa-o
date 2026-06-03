@@ -1,0 +1,53 @@
+10
+
+10 + 2
+10 - 2
+10 * 2
+10 / 2
+(10 + 2) * 2
+(((10 - 2) * 2) -2) / 2
+
+var x
+var y
+
+x
+y
+
+x = 10
+y = x
+
+x
+y
+
+x = 3 - 1
+y = x -1 *2
+x
+y
+
+x = x * 2 + (y - 1) * 3
+x
+
+const PI
+PI
+PI = 3
+PI
+PI = 4
+PI
+x = PI
+x
+PI
+
+if(x)(1)else(0)
+if(variavelnaodeclarada)(1)else(0)
+if(2+2 = 4)(1)else(0)
+if(2+2 ,= 4)(1)else(0)
+
+$funcSoma(a b)'a+b'
+funcSoma(1 1)
+
+$funcTeste($)'1+2+3'
+funcTeste($)
+
+$pCEM($)'100'
+
+if(x) ( pCEM($) ) else(0)
